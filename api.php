@@ -19,7 +19,7 @@ function registerPushNotifications($conn, $user, $device_id) {
 
 function sendPushNotifications($conn,$username,$nombre, $apiKey, $appsecret, $message) {
 	//$idsSelect = "select username from usuarios where idUsuario in (select idAsociado from relacionemergencia where idUsuario=(select idUsuario from usuarios where username='".$username."'))";   
-    $sql = "select * from usuarios WHERE username='".$username."'"; 
+    $sql = "select * from usuarios WHERE username in ($username)"; 
 
 	$result = mysqli_query($conn, $sql);
 
@@ -35,7 +35,7 @@ function sendPushNotifications($conn,$username,$nombre, $apiKey, $appsecret, $me
     
     if (count($device_ids) > 0) {
 
-		$data_string ='{"message": { "alert": "Le informamos que '. $message .'" }, "target" : {"deviceIds" :' . $device_ids_j . ' } }';
+		$data_string ='{"message": { "alert": "Le informamos que '.$nombre.' '. $message .'" }, "target" : {"deviceIds" :' . $device_ids_j . ' } }';
 			
 		$ch = curl_init('https://mobile.ng.bluemix.net/imfpush/v1/apps/' . $apiKey .'/messages');
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
@@ -57,6 +57,7 @@ function sendPushNotifications($conn,$username,$nombre, $apiKey, $appsecret, $me
 	   var_dump( $text1);
 	   curl_close($ch);	
 	}	 
+
 }
 
 switch ($method) {
