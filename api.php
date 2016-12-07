@@ -8,11 +8,11 @@ mysqli_set_charset($conn,"utf8");
 //Funciones para el registro de Push y envío de notificaciones Push
 
 function registerPushNotifications($conn, $user, $device_id) {
-    $query = mysqli_query($conn, "SELECT * FROM registros_push WHERE deviceid='".$device_id ."' and username='".$user ."' ");
+    $query = mysqli_query($conn, "SELECT * FROM usuarios WHERE deviceid='".$device_id ."' and username='".$user ."' ");
 	if (mysqli_num_rows($query) > 0){	
 	    return array("success" => 1);
 	} else {	    
-	    $sql = "DELETE FROM registros_push where username='". $user ."'; INSERT into registros_push (deviceid, username) values ('". $device_id . "','". $user . "')"; 
+	    $sql = "DELETE FROM usuarios where username='". $user ."'; INSERT into usuarios (deviceid, username) values ('". $device_id . "','". $user . "')"; 
 	    if (!mysqli_multi_query($conn, $sql)) {
 	    	return array("success" => 0, "Falla Multiquery");
 	    }
@@ -21,8 +21,8 @@ function registerPushNotifications($conn, $user, $device_id) {
 }
 
 function sendPushNotifications($conn,$username,$nombre, $apiKey, $appsecret, $message) {
-	$idsSelect = "select username from usuarios where idUsuario in (select idAsociado from relacionemergencia where idUsuario=(select idUsuario from usuarios where username='".$username."'))";   
-    $sql = "select * from registros_push WHERE username in ($idsSelect)"; 
+	//$idsSelect = "select username from usuarios where idUsuario in (select idAsociado from relacionemergencia where idUsuario=(select idUsuario from usuarios where username='".$username."'))";   
+    $sql = "select * from usuarios WHERE username in ($username)"; 
 
 	$result = mysqli_query($conn, $sql);
 
