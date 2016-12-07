@@ -122,7 +122,7 @@ function getProcuradores($conn){
 }
 
 function getMensajes($conn,$username){
-	$query=mysqli_query($conn,"select idMensaje, idUsuario, mensaje, estado, fechaHora orden from mensajes where idUsuario=(select idUsuario from usuarios where username ='".$username."')  order by fechaHora desc");
+	$query=mysqli_query($conn,"select idMensaje, idUsuario, mensaje, estado, fechaHora from mensajes where idUsuario=(select idUsuario from usuarios where username ='".$username."')  order by fechaHora desc");
 	$mensajes = array();
 	
 	if(mysqli_num_rows($query) > 0){
