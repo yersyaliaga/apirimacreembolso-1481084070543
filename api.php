@@ -213,7 +213,7 @@ function getServiciosUsados($conn){
 
 
 function insertMensaje($conn,$userId,$mensaje){
-	$query = "insert into mensajes(idUsuario,mensaje,estado,fechaHora) values ((select idUsuario from usuarios where username= '12345678'), 'Mensaje' , 0 , now() );";
+	$query = "insert into mensajes(idUsuario,mensaje,estado,fechaHora) values ((select idUsuario from usuarios where username= '".$userId."'), '".$mensaje."' , 0 , now() );";
 	if (mysqli_query($conn, $query)) {
 			    //echo "New record created successfully";
 	} else {
