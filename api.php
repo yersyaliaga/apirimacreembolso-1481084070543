@@ -211,6 +211,23 @@ function getServiciosUsados($conn){
 	}
 }
 
+
+function insertMensaje($conn,$userId,$mensaje){
+	$query = "insert into mensajes(idUsuario,mensaje,estado,fechaHora) values ((select idUsuario from usuarios where username='".$userId."'),".$mensaje.",0,now());";
+	if (mysqli_query($conn, $query)) {
+			    //echo "New record created successfully";
+	} else {
+		echo mysqli_error($conn);
+		array_push($error, "Error: " . $sql . "<br>" . mysqli_error($conn) );
+	}	
+	if (count($error) > 0) {
+    	echo json_encode(array("success"=>0));
+    } else {
+    	echo json_encode(array("success"=>1));
+    }
+}
+
+
 function insertEmergency($conn,$userId,$latitud,$longitud){
 	$query = "insert into emergencias(idUsuario,fechaHora,latitud,longitud,estado) values ((select idUsuario from usuarios where username='".$userId."'),now(),$latitud,$longitud,'En Proceso');";
 	if (mysqli_query($conn, $query)) {
@@ -281,6 +298,11 @@ switch ($method) {
     			$userId = $_POST["userid"];
 	  			$servicioId = $_POST["servicioid"];	  			
 	  			insertServicio($conn,$userId,$servicioId);
+    			break;
+    		case '7':
+    			$userId = $_POST["userid"];
+	  			$mensaje = $_POST["mensaje"];	  			
+	  			insertMensaje($conn,$userId,$mensaje);
     			break;
 	  	}
 	  }
