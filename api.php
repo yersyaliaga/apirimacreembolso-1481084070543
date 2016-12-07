@@ -121,6 +121,27 @@ function getProcuradores($conn){
 	}
 }
 
+function getMensajes($conn,$username){
+	$query=mysqli_query($conn,"select idMensaje, idUsuario, mensaje, estado, fechaHora orden from mensajes where idUsuario=(select idUsuario from usuarios where username ='".$username."')  order by fechaHora desc");
+	$mensajes = array();
+	
+	if(mysqli_num_rows($query) > 0){
+		while($row = mysqli_fetch_assoc($query)) {					
+			array_push($mensajes, array(
+				"id" => $row["idMensaje"],
+				"mensaje" => $row["mensaje"],
+				"usuario" => $row["idUsuario"],
+				"estado" => $row["estado"],
+				"fechahora" => $row["fechaHora"]
+			));
+		}
+		return $mensajes;					
+	}else{
+		//echo 'No hay nada';
+		return $mensajes;
+	}
+}
+
 function getActividades($conn){
 	$query=mysqli_query($conn,"select nomActividad, descripcion, orden from actividades order by orden asc");
 	$actividades = array();
@@ -333,6 +354,11 @@ switch ($method) {
 	  		case '5':	  			
   				$procuradores = getProcuradores($conn);  				
   				echo json_encode($procuradores);
+	  			break;
+	  		case '6':	
+	  			$username = $_GET["username"];
+  				$mensajes = getMensajes($conn,$username);  				
+  				echo json_encode($mensajes);
 	  			break;
 	  	}
 	  }
