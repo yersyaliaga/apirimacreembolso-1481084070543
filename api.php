@@ -122,12 +122,12 @@ function getProcuradores($conn){
 }
 
 function getMensajesNuevos($conn,$username){
-	$query=mysqli_query($conn,"select count(idMensaje) as cantidad from mensajes where idUsuario=(select idUsuario from usuarios where username ='".$username."')  ");
+	$query=mysqli_query($conn,"select count(idMensaje) as cantidad from mensajes where idUsuario=(select idUsuario from usuarios where username ='".$username."')");
 	$cantidad = array();
 	
 	if(mysqli_num_rows($query) > 0){
 		while($row = mysqli_fetch_assoc($query)) {					
-			array_push($mensajes, array(
+			array_push($cantidad, array(
 				"cantidad" => $row["cantidad"]
 			));
 		}
@@ -380,8 +380,8 @@ switch ($method) {
 	  			break;
 	  		case '7':	
 	  			$username = $_GET["username"];
-  				$mensajes = getMensajesNuevos($conn,$username);  				
-  				echo json_encode($mensajes);
+  				$nuevos = getMensajesNuevos($conn,$username);  				
+  				echo json_encode($nuevos);
 	  			break;
 	  	}
 	  }
